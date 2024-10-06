@@ -1,4 +1,5 @@
 import pandas as pd
+from random import randint
 
 
 class DataLoader:
@@ -12,10 +13,9 @@ class DataLoader:
         self.filepath = filepath
         self.data = None
 
-        # Automatically call the necessary functions
         self.load_data()
         self.clean_data()
-        self.preprocess_data()
+        # self.preprocess_data()
 
     def load_data(self):
         """
@@ -37,36 +37,36 @@ class DataLoader:
         ensuring consistent data types.
         """
         if self.data is not None:
-            # Fill missing values with 0 for scores and empty strings for 'Student' and 'Semester'
+
             self.data.fillna(
                 {
-                    "Math": 0,
-                    "Physics": 0,
-                    "Chemistry": 0,
-                    "Biology": 0,
-                    "English": 0,
+                    "Math": randint(0, 101),
+                    "Physics": randint(0, 101),
+                    "Chemistry": randint(0, 101),
+                    "Biology": randint(0, 101),
+                    "English": randint(0, 101),
                     "Student": "",
                     "Semester": "",
                 },
                 inplace=True,
             )
 
-            # Ensure score columns are numeric
             subjects = ["Math", "Physics", "Chemistry", "Biology", "English"]
             for subject in subjects:
                 self.data[subject] = pd.to_numeric(self.data[subject], errors="coerce")
 
-            # Remove duplicates
             self.data.drop_duplicates(inplace=True)
 
-    def preprocess_data(self):
-        """
-        Preprocess the data by converting certain columns to categorical types.
-        """
-        if self.data is not None:
-            # Convert the 'Semester' and 'Student' columns to categorical types
-            self.data["Semester"] = pd.Categorical(self.data["Semester"])
-            self.data["Student"] = pd.Categorical(self.data["Student"])
+            self.data["Semester"] = (
+                self.data["Semester"].str.replace("Semester ", "").astype(int)
+            )
+
+    # def preprocess_data(self):
+    #
+    #     if self.data is not None:
+    #         # Convert the 'Semester' and 'Student' columns to categorical types
+    #         self.data["Semester"] = pd.Categorical(self.data["Semester"])
+    #         self.data["Student"] = pd.Categorical(self.data["Student"])
 
     def get_data(self):
         """
@@ -75,4 +75,4 @@ class DataLoader:
         Returns:
             pd.DataFrame: The cleaned and preprocessed DataFrame.
         """
-        return self.data
+        return pd.DataFrame(self.data)
