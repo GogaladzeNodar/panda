@@ -1,5 +1,6 @@
 from src.data_loader import DataLoader
 from src.calculations import DataCalculations
+from src.visualizations import Visualize
 import pandas as pd
 
 """
@@ -13,26 +14,57 @@ import pandas as pd
 გამოავლინეთ სტუდენტები, რომლებმაც თანმიმდევრულად გააუმჯობესეს ქულები სემესტრებში.
 """
 
+
 def main():
     loader = DataLoader("data/student_scores_random_names.csv")
 
     data = loader.get_data()
 
-    # data.to_csv("test_data.csv", index=False)
-
     calc = DataCalculations(data)
 
+    print(
+        "###################################################################################################################### \n"
+    )
+
     failedStudent = calc.failed_students()
+    print(f"Failed Students - \n {failedStudent}")
+    print(
+        "###################################################################################################################### \n"
+    )
+
     avrage_per_subj = calc.calculate_average_per_subject()
-    highest_score_student = calc.get_highest_score_student()
+    print(f"Average Per Subject - \n {avrage_per_subj}")
+    print(
+        "###################################################################################################################### \n"
+    )
+
+    student_name, highest_score = calc.get_highest_score_student()
+    print(
+        f"The student with the highest average score is {student_name} with a score of {highest_score:.2f}."
+    )
+    print(
+        "###################################################################################################################### \n"
+    )
+
     difficult_subject = calc.most_difficult_subject()
+    print(f"Most Difficult subject - \n {difficult_subject}")
+    print(
+        "###################################################################################################################### \n"
+    )
+
     motivated_student = calc.find_students_with_improvement()
+    motivated_student.to_csv("data/motivated.csv", index=False)
+    
     calc.average_scores_depending_on_semesters()
+    
 
-    motivated_student.to_csv("motivated.csv", index=False)
+    print(
+        "###################################################################################################################### \n"
+    )
 
-    # Save it to a CSV file
-    data.to_csv("test_data.csv", index=False)
+    visualize = Visualize(data)
+    visualize.average_score_for_subjects()
+    visualize.average_score_by_semester()
 
 
 if __name__ == "__main__":

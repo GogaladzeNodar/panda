@@ -89,13 +89,10 @@ class DataCalculations:
         subjects = ["Math", "Physics", "Chemistry", "Biology", "English"]
 
         avg_scores_by_semester = self.data.groupby("Semester")[subjects].mean()
-        
-        
-        avg_scores_by_semester.to_excel(
-            "average_scores_by_semester.xlsx", index_label="Semester"
-        )
 
-        
+        avg_scores_by_semester.to_excel(
+            "data/average_scores_by_semester.xlsx", index_label="Semester"
+        )
 
     def find_students_with_improvement(self):
         """
